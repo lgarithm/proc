@@ -7,6 +7,6 @@ default: .PHONEY
 test:
 	go test -v ./...
 
-run:
+run: .PHONEY
 	PATH=$(CURDIR)/bin:$(PATH) \
 		run-proc
