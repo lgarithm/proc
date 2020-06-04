@@ -4,8 +4,8 @@ import (
 	"io"
 	"time"
 
-	proc "github.com/lgarithm/proc-experimental"
 	"github.com/lgarithm/proc-experimental/iostream"
+	"github.com/lgarithm/proc-experimental/result"
 )
 
 type P interface {
@@ -14,17 +14,17 @@ type P interface {
 	Wait() error
 }
 
-func Run(p P, redirectors ...*iostream.StdWriters) proc.Result {
+func Run(p P, redirectors ...*iostream.StdWriters) result.Result {
 	t0 := time.Now()
 	stdout, stderr, err := p.Stdpipe()
 	if err != nil {
-		return proc.Return(t0, err)
+		return result.Return(t0, err)
 	}
 	results := iostream.StdReaders{Stdout: stdout, Stderr: stderr}
 	ioDone := results.Stream(redirectors...)
 	if err := p.Start(); err != nil {
-		return proc.Return(t0, err)
+		return result.Return(t0, err)
 	}
 	ioDone.Wait()
-	return proc.Return(t0, p.Wait())
+	return result.Return(t0, p.Wait())
 }
