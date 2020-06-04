@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/lgarithm/proc-experimental"
 	"github.com/lgarithm/proc-experimental/builtin"
@@ -17,6 +20,7 @@ func main() {
 	flag.Parse()
 	parExample()
 	seqExample()
+	tryExample()
 }
 
 func parExample() {
@@ -50,5 +54,24 @@ func seqExample() {
 		if r := execution.Run(p, w); r.Err != nil {
 			fmt.Printf("failed: %v\n", r.Err)
 		}
+	}
+}
+
+func tryExample() {
+	e := errors.New("e")
+	var n int
+	q := func() execution.P {
+		n++
+		fmt.Printf("trial #%d\n", n)
+		return control.Par(
+			builtin.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
+			builtin.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
+			builtin.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
+		)
+	}
+	p := control.Try(q)
+	w := iostream.NewXTermRedirector(`x`, xterm.Green)
+	if r := execution.Run(p, w); r.Err != nil {
+		fmt.Printf("failed: %v\n", r.Err)
 	}
 }

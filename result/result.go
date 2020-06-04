@@ -2,6 +2,7 @@ package result
 
 import (
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -12,6 +13,8 @@ type Result struct {
 
 func (r Result) Unwrap() {
 	if r.Err != nil {
+		fmt.Fprintf(os.Stderr, "failed %v\n", r.Err)
+		os.Exit(1)
 		return
 	}
 	fmt.Printf("took %s\n", r.Took)
