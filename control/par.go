@@ -23,12 +23,12 @@ type par struct {
 func (p *par) Stdpipe() (io.Reader, io.Reader, error) {
 	var outs, errs []io.Reader
 	for _, q := range p.ps {
-		out, err, e := q.Stdpipe()
-		if e != nil {
-			return nil, nil, e
+		stdout, stderr, err := q.Stdpipe()
+		if err != nil {
+			return nil, nil, err
 		}
-		outs = append(outs, out)
-		errs = append(errs, err)
+		outs = append(outs, stdout)
+		errs = append(errs, stderr)
 	}
 	go func() {
 		iostream.Mix(p.outW, outs...)
