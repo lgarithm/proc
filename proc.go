@@ -11,12 +11,6 @@ import (
 
 type Envs map[string]string
 
-func (e Envs) AddIfMissing(k, v string) {
-	if _, ok := e[k]; !ok {
-		e[k] = v
-	}
-}
-
 func Merge(e, f Envs) Envs {
 	g := make(Envs)
 	for k, v := range e {
@@ -34,9 +28,8 @@ type Proc struct {
 	Prog     string
 	Args     []string
 	Envs     Envs
-	Hostname string
-	LogDir   string
 	Dir      string
+	Hostname string
 }
 
 func (p Proc) CmdCtx(ctx context.Context) *exec.Cmd {

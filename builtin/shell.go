@@ -3,8 +3,6 @@ package builtin
 import (
 	"io"
 	"os/exec"
-
-	"github.com/lgarithm/proc-experimental/control"
 )
 
 type shell struct {
@@ -27,4 +25,4 @@ func (p *shell) Start() error { return p.c.Start() }
 
 func (p *shell) Wait() error { return p.c.Wait() }
 
-func Shell(c *exec.Cmd) control.P { return &shell{c: c} }
+func Shell(c *exec.Cmd) *shell { return &shell{c: c} }

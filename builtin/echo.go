@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"io"
 	"sync"
-
-	"github.com/lgarithm/proc-experimental/control"
 )
 
 type echo struct {
@@ -35,7 +33,7 @@ func (p *echo) Wait() error {
 	return nil
 }
 
-func Echo(s string) control.P {
+func Echo(s string) *echo {
 	r, w := io.Pipe()
 	p := &echo{
 		s:    s,

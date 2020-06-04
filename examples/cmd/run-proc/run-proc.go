@@ -8,6 +8,7 @@ import (
 	"github.com/lgarithm/proc-experimental"
 	"github.com/lgarithm/proc-experimental/builtin"
 	"github.com/lgarithm/proc-experimental/control"
+	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 	"github.com/lgarithm/proc-experimental/xterm"
 )
@@ -29,7 +30,7 @@ func parExample() {
 			builtin.Shell(p.CmdCtx(context.TODO())),
 		)
 		w := iostream.NewXTermRedirector(`x`, xterm.Green)
-		if r := control.Run(p, w); r.Err != nil {
+		if r := execution.Run(p, w); r.Err != nil {
 			fmt.Printf("failed: %v\n", r.Err)
 		}
 	}
@@ -46,7 +47,7 @@ func seqExample() {
 			builtin.Shell(p.CmdCtx(context.TODO())),
 		)
 		w := iostream.NewXTermRedirector(`x`, xterm.Green)
-		if r := control.Run(p, w); r.Err != nil {
+		if r := execution.Run(p, w); r.Err != nil {
 			fmt.Printf("failed: %v\n", r.Err)
 		}
 	}

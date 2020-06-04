@@ -1,14 +1,16 @@
 package control
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
+	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type par struct {
-	ps []P
+	ps []execution.P
 
 	errs []error
 
@@ -43,7 +45,7 @@ func (p *par) Stdpipe() (io.Reader, io.Reader, error) {
 
 func (p *par) Start() error {
 	for i, q := range p.ps {
-		go func(i int, q P) {
+		go func(i int, q execution.P) {
 			q.Start()
 			p.errs[i] = q.Wait()
 			p.wg.Done()
@@ -54,11 +56,10 @@ func (p *par) Start() error {
 
 func (p *par) Wait() error {
 	p.wg.Wait()
-	// FIXME: merge p.errs
-	return nil
+	return mergeErrors(p.errs)
 }
 
-func Par(ps ...P) P {
+func Par(ps ...execution.P) execution.P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &par{
@@ -71,4 +72,22 @@ func Par(ps ...P) P {
 	}
 	p.wg.Add(len(ps))
 	return p
+}
+
+func mergeErrors(errs []error) error {
+	var msg string
+	var failed int
+	for _, e := range errs {
+		if e != nil {
+			failed++
+			if len(msg) > 0 {
+				msg += ", "
+			}
+			msg += e.Error()
+		}
+	}
+	if failed == 0 {
+		return nil
+	}
+	return fmt.Errorf("%d failed out of %d: %s", failed, len(errs), msg)
 }

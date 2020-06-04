@@ -3,8 +3,6 @@ package builtin
 import (
 	"bytes"
 	"io"
-
-	"github.com/lgarithm/proc-experimental/control"
 )
 
 type noop struct{}
@@ -19,4 +17,4 @@ func (p *noop) Start() error { return nil }
 
 func (p *noop) Wait() error { return nil }
 
-func Noop() control.P { return &noop{} }
+func Noop() *noop { return &noop{} }
