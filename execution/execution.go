@@ -1,6 +1,7 @@
 package execution
 
 import (
+	"bytes"
 	"io"
 	"time"
 
@@ -27,4 +28,13 @@ func Run(p P, redirectors ...*iostream.StdWriters) result.Result {
 	}
 	ioDone.Wait()
 	return result.Return(t0, p.Wait())
+}
+
+func Output(p P) []byte {
+	stdout := &bytes.Buffer{}
+	stdpipe := &iostream.StdWriters{
+		Stdout: stdout,
+	}
+	Run(p, stdpipe) // FIXME: handle error
+	return stdout.Bytes()
 }
