@@ -8,6 +8,30 @@ import (
 	"github.com/lgarithm/proc-experimental/xterm"
 )
 
+type Terminal struct {
+	prefix string
+	w      io.Writer
+}
+
+func (t Terminal) Write(bs []byte) (int, error) {
+	fmt.Fprintf(t.w, "%s%s", t.prefix, string(bs))
+	return len(bs), nil
+}
+
+func NewTerminal(prefix string, w io.Writer) *Terminal {
+	return &Terminal{
+		prefix: prefix,
+		w:      w,
+	}
+}
+
+func NewTerminalRedirector(prefix string) *StdWriters {
+	return &StdWriters{
+		Stdout: NewTerminal(prefix, os.Stdout),
+		Stderr: NewTerminal(prefix, os.Stderr),
+	}
+}
+
 type XtermWriter struct {
 	prefix string
 	w      io.Writer
