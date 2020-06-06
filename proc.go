@@ -24,12 +24,13 @@ func Merge(e, f Envs) Envs {
 
 // Proc represents a general purpose process
 type Proc struct {
-	Name     string
-	Prog     string
-	Args     []string
-	Envs     Envs
-	Dir      string
-	Hostname string
+	Name string
+	Prog string
+	Args []string
+	Envs Envs
+	Dir  string
+	Host string
+	User string
 }
 
 func (p Proc) CmdCtx(ctx context.Context) *exec.Cmd {

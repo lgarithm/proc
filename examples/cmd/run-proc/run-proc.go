@@ -22,6 +22,7 @@ func main() {
 	seqExample()
 	tryExample()
 	complexExample()
+	sshExample()
 }
 
 func parExample() {
@@ -123,6 +124,18 @@ func complexExample() {
 		return control.Seq(p1, p2, p3)
 	}
 	p := control.Par(nt(), nt(), nt())
+	w := iostream.NewTerminalRedirector(``)
+	r := execution.Run(p, w)
+	r.Unwrap()
+}
+
+func sshExample() {
+	q := proc.Proc{
+		Prog: `seq`,
+		Args: []string{`100000`},
+		Host: `localhost`,
+	}
+	p := builtin.SSH(q).Timeout(100 * time.Millisecond)
 	w := iostream.NewTerminalRedirector(``)
 	r := execution.Run(p, w)
 	r.Unwrap()
