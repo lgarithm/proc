@@ -35,7 +35,7 @@ func (p *try) Start() error {
 			stdout, stderr, err := q.Stdpipe()
 			if err != nil {
 				p.lastErr = err
-				break
+				continue
 			}
 			results := iostream.StdReaders{Stdout: stdout, Stderr: stderr}
 			ioDone := results.Stream(redirector)
