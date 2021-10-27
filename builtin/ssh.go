@@ -19,6 +19,8 @@ type sshell struct {
 	err     error
 	client  *ssh.Client
 	sess    *ssh.Session
+
+	pty bool
 }
 
 func (p *sshell) Stdpipe() (io.Reader, io.Reader, error) {
@@ -35,8 +37,11 @@ func (p *sshell) Stdpipe() (io.Reader, io.Reader, error) {
 	if stderr, p.err = p.sess.StderrPipe(); p.err != nil {
 		return nil, nil, p.err
 	}
-	if p.err = p.sess.RequestPty("xterm", 80, 40, nil); p.err != nil {
-		return nil, nil, p.err
+	// would cause stderr merged into stdout
+	if p.pty {
+		if p.err = p.sess.RequestPty("xterm", 80, 40, nil); p.err != nil {
+			return nil, nil, p.err
+		}
 	}
 	return stdout, stderr, nil
 }
@@ -50,6 +55,12 @@ func (p *sshell) Wait() error {
 
 func (p *sshell) Timeout(timeout time.Duration) *sshell {
 	p.timeout = timeout
+	return p
+}
+
+// Pty makes session to RequestPty
+func (p *sshell) Pty() *sshell {
+	p.pty = true
 	return p
 }
 
