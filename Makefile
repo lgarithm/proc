@@ -1,4 +1,4 @@
-default: .PHONEY
+default: test .PHONEY
 
 .PHONEY examples:
 	go mod tidy

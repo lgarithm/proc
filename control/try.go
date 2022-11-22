@@ -9,7 +9,7 @@ import (
 )
 
 type try struct {
-	p       func() execution.P
+	p       func(int) execution.P
 	lastErr error
 
 	outR io.ReadCloser
@@ -30,8 +30,8 @@ func (p *try) Start() error {
 		Stderr: p.errW,
 	}
 	go func() {
-		for {
-			q := p.p()
+		for i := 0; ; i++ {
+			q := p.p(i)
 			stdout, stderr, err := q.Stdpipe()
 			if err != nil {
 				p.lastErr = err
@@ -63,7 +63,7 @@ func (p *try) Wait() error {
 	return p.lastErr
 }
 
-func Try(q func() execution.P) execution.P {
+func TryI(q func(int) execution.P) execution.P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &try{
@@ -75,4 +75,8 @@ func Try(q func() execution.P) execution.P {
 	}
 	p.wg.Add(1)
 	return p
+}
+
+func Try(q func() execution.P) execution.P {
+	return TryI(func(int) execution.P { return q() })
 }
