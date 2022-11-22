@@ -2,12 +2,10 @@ package control
 
 import (
 	"io"
-
-	"github.com/lgarithm/proc-experimental/execution"
 )
 
 type ignore struct {
-	p execution.P
+	p P
 }
 
 func (p *ignore) Stdpipe() (io.Reader, io.Reader, error) {
@@ -23,7 +21,7 @@ func (p *ignore) Wait() error {
 	return nil
 }
 
-func Ignore(q execution.P) execution.P {
+func Ignore(q P) P {
 	p := &ignore{p: q}
 	return p
 }

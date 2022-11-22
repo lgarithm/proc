@@ -5,12 +5,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type par struct {
-	ps []execution.P
+	ps []P
 
 	errs []error
 
@@ -45,7 +44,7 @@ func (p *par) Stdpipe() (io.Reader, io.Reader, error) {
 
 func (p *par) Start() error {
 	for i, q := range p.ps {
-		go func(i int, q execution.P) {
+		go func(i int, q P) {
 			q.Start()
 			p.errs[i] = q.Wait()
 			p.wg.Done()
@@ -59,7 +58,7 @@ func (p *par) Wait() error {
 	return mergeErrors(p.errs)
 }
 
-func Par(ps ...execution.P) execution.P {
+func Par(ps ...P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &par{

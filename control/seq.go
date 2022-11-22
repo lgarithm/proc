@@ -4,12 +4,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type seq struct {
-	ps       []execution.P
+	ps       []P
 	firstErr error
 
 	outR io.ReadCloser
@@ -60,7 +59,7 @@ func (p *seq) Wait() error {
 	return p.firstErr
 }
 
-func Seq(ps ...execution.P) execution.P {
+func Seq(ps ...P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &seq{

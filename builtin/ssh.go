@@ -9,12 +9,11 @@ import (
 	"path"
 	"time"
 
-	proc "github.com/lgarithm/proc-experimental"
 	"golang.org/x/crypto/ssh"
 )
 
 type sshell struct {
-	p       proc.Proc
+	p       Proc
 	timeout time.Duration
 	err     error
 	client  *ssh.Client
@@ -64,9 +63,9 @@ func (p *sshell) Pty() *sshell {
 	return p
 }
 
-func SSH(p proc.Proc) *sshell { return &sshell{p: p} }
+func SSH(p Proc) *sshell { return &sshell{p: p} }
 
-func newClient(p proc.Proc, timeout time.Duration) (*ssh.Client, error) {
+func newClient(p Proc, timeout time.Duration) (*ssh.Client, error) {
 	key, err := defaultKeyFile()
 	if err != nil {
 		return nil, err

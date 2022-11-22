@@ -4,12 +4,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type try struct {
-	p       func(int) execution.P
+	p       func(int) P
 	lastErr error
 
 	outR io.ReadCloser
@@ -63,7 +62,7 @@ func (p *try) Wait() error {
 	return p.lastErr
 }
 
-func TryI(q func(int) execution.P) execution.P {
+func TryI(q func(int) P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &try{
@@ -77,6 +76,6 @@ func TryI(q func(int) execution.P) execution.P {
 	return p
 }
 
-func Try(q func() execution.P) execution.P {
-	return TryI(func(int) execution.P { return q() })
+func Try(q func() P) P {
+	return TryI(func(int) P { return q() })
 }

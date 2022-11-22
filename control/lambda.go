@@ -4,12 +4,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type lambda struct {
-	p   func() execution.P
+	p   func() P
 	err error
 
 	outR io.ReadCloser
@@ -59,7 +58,7 @@ func (p *lambda) Wait() error {
 	return p.err
 }
 
-func Lambda(q func() execution.P) execution.P {
+func Lambda(q func() P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &lambda{

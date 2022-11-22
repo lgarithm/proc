@@ -4,12 +4,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type tee struct {
-	p   execution.P
+	p   P
 	ws  []*iostream.StdWriters
 	err error
 
@@ -61,7 +60,7 @@ func (p *tee) Wait() error {
 	return p.err
 }
 
-func Tee(q execution.P, ws ...*iostream.StdWriters) execution.P {
+func Tee(q P, ws ...*iostream.StdWriters) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &tee{

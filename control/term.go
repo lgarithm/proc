@@ -4,13 +4,12 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/execution"
 	"github.com/lgarithm/proc-experimental/iostream"
 )
 
 type term struct {
 	prefix string
-	p      execution.P
+	p      P
 	err    error
 
 	outR io.ReadCloser
@@ -59,7 +58,7 @@ func (p *term) Wait() error {
 	return p.err
 }
 
-func Term(prefix string, q execution.P) execution.P {
+func Term(prefix string, q P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &term{
