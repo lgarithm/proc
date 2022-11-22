@@ -38,3 +38,9 @@ func Output(p P) []byte {
 	Run(p, stdpipe) // FIXME: handle error
 	return stdout.Bytes()
 }
+
+func Main(p P) {
+	if r := Run(p, &iostream.Std); r.Err != nil {
+		panic(r.Err)
+	}
+}
