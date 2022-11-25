@@ -1,4 +1,4 @@
-module github.com/lgarithm/proc-experimental
+module github.com/lgarithm/proc
 
 go 1.14
 

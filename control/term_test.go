@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/lgarithm/proc-experimental/builtin"
-	"github.com/lgarithm/proc-experimental/execution"
-	"github.com/lgarithm/proc-experimental/iostream"
+	"github.com/lgarithm/proc/builtin"
+	"github.com/lgarithm/proc/execution"
+	"github.com/lgarithm/proc/iostream"
 )
 
 func Test_term(t *testing.T) {

@@ -3,10 +3,10 @@ package plugins
 import (
 	"context"
 
-	"github.com/lgarithm/proc-experimental"
-	"github.com/lgarithm/proc-experimental/builtin"
-	"github.com/lgarithm/proc-experimental/control"
-	"github.com/lgarithm/proc-experimental/execution"
+	"github.com/lgarithm/proc"
+	"github.com/lgarithm/proc/builtin"
+	"github.com/lgarithm/proc/control"
+	"github.com/lgarithm/proc/execution"
 )
 
 type (

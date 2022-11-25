@@ -5,7 +5,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/lgarithm/proc-experimental/iostream"
+	"github.com/lgarithm/proc/iostream"
 )
 
 type par struct {

@@ -5,8 +5,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/lgarithm/proc-experimental/iostream"
-	"github.com/lgarithm/proc-experimental/result"
+	"github.com/lgarithm/proc/iostream"
+	"github.com/lgarithm/proc/result"
 )
 
 type P interface {

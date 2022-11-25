@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/lgarithm/proc-experimental/builtin"
-	"github.com/lgarithm/proc-experimental/execution"
+	"github.com/lgarithm/proc/builtin"
+	"github.com/lgarithm/proc/execution"
 )
 
 func Test_par(t *testing.T) {

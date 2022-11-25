@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/lgarithm/proc-experimental/xterm"
+	"github.com/lgarithm/proc/xterm"
 )
 
 type Terminal struct {
