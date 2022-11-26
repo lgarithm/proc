@@ -4,6 +4,7 @@ import (
 	"github.com/lgarithm/proc/builtin"
 	"github.com/lgarithm/proc/control"
 	"github.com/lgarithm/proc/execution"
+	"github.com/lgarithm/proc/iostream"
 	"github.com/lgarithm/proc/plugins"
 	"github.com/lgarithm/proc/proc"
 )
@@ -14,6 +15,7 @@ type (
 )
 
 var (
+	Main   = execution.Main
 	Run    = execution.Run
 	Output = execution.Output
 	Out    = Output
@@ -35,6 +37,10 @@ var (
 	Term   = control.Term
 	Try    = control.Try
 	TryI   = control.TryI
+)
+
+var (
+	Stdio = iostream.Std
 )
 
 type UserHost = plugins.UserHost
