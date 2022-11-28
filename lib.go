@@ -29,6 +29,7 @@ var (
 	Shell = builtin.Shell
 	SH    = Shell
 	SSH   = builtin.SSH
+	Error = builtin.Failure
 
 	Ignore = control.Ignore
 	Lambda = control.Lambda
