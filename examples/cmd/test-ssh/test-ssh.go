@@ -9,8 +9,6 @@ import (
 	"time"
 
 	"github.com/lgarithm/proc"
-	"github.com/lgarithm/proc/builtin"
-	"github.com/lgarithm/proc/execution"
 	"github.com/lgarithm/proc/iostream"
 )
 
@@ -21,7 +19,7 @@ func main() {
 		Prog: pwd + "/bin/task",
 		Host: `localhost`,
 	}
-	p := builtin.SSH(q).Timeout(100 * time.Millisecond)
-	r := execution.Run(p, &iostream.Std)
+	p := proc.SSH(q).Timeout(100 * time.Millisecond)
+	r := proc.Run(p, &iostream.Std)
 	r.Unwrap()
 }

@@ -9,9 +9,6 @@ import (
 	"time"
 
 	"github.com/lgarithm/proc"
-	"github.com/lgarithm/proc/builtin"
-	"github.com/lgarithm/proc/control"
-	"github.com/lgarithm/proc/execution"
 	"github.com/lgarithm/proc/iostream"
 	"github.com/lgarithm/proc/xterm"
 )
@@ -31,12 +28,12 @@ func parExample() {
 		Args: []string{`par-example`},
 	}
 	{
-		p := control.Par(
-			builtin.Shell(p.CmdCtx(context.TODO())),
-			builtin.Shell(p.CmdCtx(context.TODO())),
+		p := proc.Par(
+			proc.Shell(p.CmdCtx(context.TODO())),
+			proc.Shell(p.CmdCtx(context.TODO())),
 		)
 		w := iostream.NewXTermRedirector(`x`, xterm.Green)
-		if r := execution.Run(p, w); r.Err != nil {
+		if r := proc.Run(p, w); r.Err != nil {
 			fmt.Printf("failed: %v\n", r.Err)
 		}
 	}
@@ -48,12 +45,12 @@ func seqExample() {
 		Args: []string{`seq-example`},
 	}
 	{
-		p := control.Seq(
-			builtin.Shell(p.CmdCtx(context.TODO())),
-			builtin.Shell(p.CmdCtx(context.TODO())),
+		p := proc.Seq(
+			proc.Shell(p.CmdCtx(context.TODO())),
+			proc.Shell(p.CmdCtx(context.TODO())),
 		)
 		w := iostream.NewXTermRedirector(`x`, xterm.Green)
-		if r := execution.Run(p, w); r.Err != nil {
+		if r := proc.Run(p, w); r.Err != nil {
 			fmt.Printf("failed: %v\n", r.Err)
 		}
 	}
@@ -62,18 +59,18 @@ func seqExample() {
 func tryExample() {
 	e := errors.New("e")
 	var n int
-	q := func() execution.P {
+	q := func() proc.P {
 		n++
 		fmt.Printf("trial #%d\n", n)
-		return control.Par(
-			builtin.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
-			builtin.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
-			builtin.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
+		return proc.Par(
+			proc.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
+			proc.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
+			proc.RandomFailure(e, 0.9, rand.New(rand.NewSource(time.Now().UnixNano()))),
 		)
 	}
-	p := control.Try(q)
+	p := proc.Try(q)
 	w := iostream.NewXTermRedirector(`x`, xterm.Green)
-	if r := execution.Run(p, w); r.Err != nil {
+	if r := proc.Run(p, w); r.Err != nil {
 		fmt.Printf("failed: %v\n", r.Err)
 	}
 }
@@ -115,17 +112,17 @@ const narrative = `narrative
 
 func complexExample() {
 	var n int
-	nt := func() execution.P {
+	nt := func() proc.P {
 		n++
 		prefix := func(x string) string { return fmt.Sprintf("[nt/%d/%s] ", n, x) }
-		p1 := control.Term(prefix(`A`), builtin.Echo(narrative))
-		p2 := control.Term(prefix(`B`), builtin.Echo(narrative))
-		p3 := control.Term(prefix(`C`), builtin.Echo(narrative))
-		return control.Seq(p1, p2, p3)
+		p1 := proc.Term(prefix(`A`), proc.Echo(narrative))
+		p2 := proc.Term(prefix(`B`), proc.Echo(narrative))
+		p3 := proc.Term(prefix(`C`), proc.Echo(narrative))
+		return proc.Seq(p1, p2, p3)
 	}
-	p := control.Par(nt(), nt(), nt())
+	p := proc.Par(nt(), nt(), nt())
 	w := iostream.NewTerminalRedirector(``)
-	r := execution.Run(p, w)
+	r := proc.Run(p, w)
 	r.Unwrap()
 }
 
@@ -135,8 +132,8 @@ func sshExample() {
 		Args: []string{`100000`},
 		Host: `localhost`,
 	}
-	p := builtin.SSH(q).Timeout(100 * time.Millisecond)
+	p := proc.SSH(q).Timeout(100 * time.Millisecond)
 	w := iostream.NewTerminalRedirector(``)
-	r := execution.Run(p, w)
+	r := proc.Run(p, w)
 	r.Unwrap()
 }

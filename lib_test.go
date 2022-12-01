@@ -12,6 +12,11 @@ type (
 )
 
 func Test_1(t *testing.T) {
+	isP(proc.Noop())
+	isP(proc.Fn(ok))
+	isP(proc.FnOk(void))
+	isP(proc.Error(nil))
+
 	isCombinator(proc.Par)
 	isCombinator(proc.Seq)
 
@@ -21,8 +26,14 @@ func Test_1(t *testing.T) {
 	isEndo(proc.Ignore)
 }
 
-func isCombinator(f func(ps ...P) P) {}
+func isP(P) {}
 
-func isFEndo(f func(func() P) P) {}
+func isCombinator(func(ps ...P) P) {}
 
-func isEndo(f func(P) P) {}
+func isFEndo(func(func() P) P) {}
+
+func isEndo(func(P) P) {}
+
+func ok() error { return nil }
+
+func void() {}
