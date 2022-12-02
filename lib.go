@@ -49,7 +49,10 @@ var (
 	Stdio = iostream.Std
 )
 
-type UserHost = remote.UserHost
+type (
+	User     = remote.User
+	UserHost = remote.UserHost
+)
 
 var (
 	At   = remote.At

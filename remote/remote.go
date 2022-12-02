@@ -35,3 +35,7 @@ func Urpc(uh UserHost, prog string, args ...string) P {
 func Trpc(ps1, host string, prog string, args ...string) P {
 	return term(ps1, RPC(host, prog, args...))
 }
+
+type User string
+
+func (u User) At(host string) UserHost { return At(string(u), host) }
