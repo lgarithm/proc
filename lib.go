@@ -25,6 +25,8 @@ var (
 	Par = control.Par
 	Seq = control.Seq
 
+	Call = proc.Call
+
 	Echo  = builtin.Echo
 	Error = builtin.Failure
 	Fn    = builtin.Fn
@@ -63,9 +65,7 @@ var (
 	Urpc = remote.Urpc
 )
 
-func PC(prog string, args ...string) P {
-	return Psh(Proc{Prog: prog, Args: args})
-}
+func PC(prog string, args ...string) P { return Psh(Call(prog, args...)) }
 
 func Psh(p Proc) P { return SH(p.CmdCtx(context.TODO())) }
 
@@ -77,4 +77,12 @@ func (Local) PC(prog string, args ...string) P { return PC(prog, args...) }
 
 type CreateP interface {
 	PC(prog string, args ...string) P
+}
+
+type Env = proc.Envs
+
+func SetEnv(p *Proc, k, v string) {
+	e := make(Env)
+	e[k] = v
+	p.Envs = proc.Merge(p.Envs, e)
 }
