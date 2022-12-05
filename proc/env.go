@@ -5,10 +5,10 @@ import (
 	"strings"
 )
 
-type Envs map[string]string
+type Env map[string]string
 
-func Merge(e, f Envs) Envs {
-	g := make(Envs)
+func Merge(e, f Env) Env {
+	g := make(Env)
 	for k, v := range e {
 		g[k] = v
 	}
@@ -18,7 +18,7 @@ func Merge(e, f Envs) Envs {
 	return g
 }
 
-func updatedEnvFrom(newValues Envs, oldEnvs []string) []string {
+func updatedEnvFrom(newValues Env, oldEnvs []string) []string {
 	envMap := parseEnv(oldEnvs)
 	for k, v := range newValues {
 		envMap[k] = v
@@ -30,8 +30,8 @@ func updatedEnvFrom(newValues Envs, oldEnvs []string) []string {
 	return envs
 }
 
-func parseEnv(envs []string) Envs {
-	envMap := make(Envs)
+func parseEnv(envs []string) Env {
+	envMap := make(Env)
 	for _, kv := range envs {
 		parts := strings.SplitN(kv, "=", 2)
 		if len(parts) == 2 {

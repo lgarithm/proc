@@ -79,10 +79,10 @@ type CreateP interface {
 	PC(prog string, args ...string) P
 }
 
-type Env = proc.Envs
+type Env = proc.Env
 
 func SetEnv(p *Proc, k, v string) {
 	e := make(Env)
 	e[k] = v
-	p.Envs = proc.Merge(p.Envs, e)
+	p.Env = proc.Merge(p.Env, e)
 }

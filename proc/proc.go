@@ -13,7 +13,7 @@ type Proc struct {
 	Name string
 	Prog string
 	Args []string
-	Envs Envs
+	Env  Env
 	Dir  string
 	Host string
 	User string
@@ -21,7 +21,7 @@ type Proc struct {
 
 func (p Proc) CmdCtx(ctx context.Context) *exec.Cmd {
 	cmd := exec.CommandContext(ctx, p.Prog, p.Args...)
-	cmd.Env = updatedEnvFrom(p.Envs, os.Environ())
+	cmd.Env = updatedEnvFrom(p.Env, os.Environ())
 	cmd.Dir = p.Dir
 	return cmd
 }
@@ -33,7 +33,7 @@ func (p Proc) Script() string {
 		chdir = fmt.Sprintf("-C %s", p.Dir)
 	}
 	fmt.Fprintf(buf, "env %s\\\n", chdir)
-	for k, v := range p.Envs {
+	for k, v := range p.Env {
 		fmt.Fprintf(buf, "\t%s=%q \\\n", k, v)
 	}
 	fmt.Fprintf(buf, "\t%s \\\n", p.Prog)
