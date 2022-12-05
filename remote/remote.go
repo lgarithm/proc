@@ -24,12 +24,16 @@ func At(u, h string) UserHost {
 	}
 }
 
+func (a UserHost) PC(prog string, args ...string) P {
+	return Urpc(a, prog, args...)
+}
+
 func RPC(host string, prog string, args ...string) P {
 	return SSH(Proc{Prog: prog, Args: args, Host: host})
 }
 
-func Urpc(uh UserHost, prog string, args ...string) P {
-	return SSH(Proc{Prog: prog, Args: args, Host: uh.Host, User: uh.User})
+func Urpc(a UserHost, prog string, args ...string) P {
+	return SSH(Proc{Prog: prog, Args: args, Host: a.Host, User: a.User})
 }
 
 func Trpc(ps1, host string, prog string, args ...string) P {

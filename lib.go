@@ -70,3 +70,11 @@ func PC(prog string, args ...string) P {
 func Psh(p Proc) P { return SH(p.CmdCtx(context.TODO())) }
 
 func Ps(p ...P) []P { return p }
+
+type Local struct{}
+
+func (Local) PC(prog string, args ...string) P { return PC(prog, args...) }
+
+type CreateP interface {
+	PC(prog string, args ...string) P
+}

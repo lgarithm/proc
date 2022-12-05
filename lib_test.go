@@ -37,3 +37,12 @@ func isEndo(func(P) P) {}
 func ok() error { return nil }
 
 func void() {}
+
+func Test_2(t *testing.T) {
+	var l proc.Local
+	isCreateP(l)
+	var a proc.UserHost
+	isCreateP(a)
+}
+
+func isCreateP(proc.CreateP) {}
