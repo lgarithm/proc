@@ -86,3 +86,10 @@ func SetEnv(p *Proc, k, v string) {
 	e[k] = v
 	p.Env = proc.Merge(p.Env, e)
 }
+
+func If(ok bool, p P) P {
+	if ok {
+		return p
+	}
+	return Noop()
+}
