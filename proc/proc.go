@@ -10,7 +10,6 @@ import (
 
 // Proc represents a general purpose process
 type Proc struct {
-	Name string
 	Prog string
 	Args []string
 	Env  Env
