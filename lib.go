@@ -47,10 +47,6 @@ var (
 	RandomFailure = builtin.RandomFailure
 )
 
-var (
-	Stdio = iostream.Std
-)
-
 type (
 	User     = remote.User
 	UserHost = remote.UserHost
@@ -93,3 +89,8 @@ func If(ok bool, p P) P {
 	}
 	return Noop()
 }
+
+var (
+	Stdio = iostream.Std
+	Open2 = iostream.Open2
+)
