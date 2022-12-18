@@ -71,6 +71,14 @@ type Local struct{}
 
 func (Local) PC(prog string, args ...string) P { return PC(prog, args...) }
 
+type LocalDir string
+
+func (d LocalDir) PC(prog string, args ...string) P {
+	p := Call(prog, args...)
+	p.Dir = string(d)
+	return Psh(p)
+}
+
 type CreateP interface {
 	PC(prog string, args ...string) P
 }

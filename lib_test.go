@@ -43,6 +43,8 @@ func Test_2(t *testing.T) {
 	isCreateP(l)
 	var a proc.UserHost
 	isCreateP(a)
+	var d proc.LocalDir
+	isCreateP(d)
 }
 
 func isCreateP(proc.CreateP) {}
