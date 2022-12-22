@@ -24,6 +24,9 @@ func Test_1(t *testing.T) {
 	isFEndo(proc.Lmd)
 
 	isEndo(proc.Ignore)
+
+	var ps proc.PS1
+	isEndo(ps.Term)
 }
 
 func isP(P) {}

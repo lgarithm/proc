@@ -102,3 +102,7 @@ var (
 	Stdio = iostream.Std
 	Open2 = iostream.Open2
 )
+
+type PS1 string
+
+func (ps PS1) Term(p P) P { return Term(string(ps), p) }
