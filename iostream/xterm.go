@@ -8,6 +8,12 @@ import (
 	"github.com/lgarithm/proc/xterm"
 )
 
+type PromStr string
+
+func (p PromStr) NewTerm(w io.Writer) *Terminal {
+	return NewTerminal(string(p), w)
+}
+
 type Terminal struct {
 	prefix string
 	w      io.Writer
