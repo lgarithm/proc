@@ -3,8 +3,6 @@ package control
 import (
 	"io"
 	"sync"
-
-	"github.com/lgarithm/proc/iostream"
 )
 
 type lambda struct {
@@ -24,7 +22,7 @@ func (p *lambda) Stdpipe() (io.Reader, io.Reader, error) {
 }
 
 func (p *lambda) Start() error {
-	redirector := &iostream.StdWriters{
+	redirector := &StdWriters{
 		Stdout: p.outW,
 		Stderr: p.errW,
 	}
@@ -38,7 +36,7 @@ func (p *lambda) Start() error {
 			p.err = err
 			return
 		}
-		results := iostream.StdReaders{Stdout: stdout, Stderr: stderr}
+		results := StdReaders{Stdout: stdout, Stderr: stderr}
 		ioDone := results.Stream(redirector)
 		if err := q.Start(); err != nil {
 			p.err = err

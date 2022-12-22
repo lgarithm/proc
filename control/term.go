@@ -3,12 +3,10 @@ package control
 import (
 	"io"
 	"sync"
-
-	"github.com/lgarithm/proc/iostream"
 )
 
 type term struct {
-	redirector *iostream.StdWriters
+	redirector *StdWriters
 	p          P
 	err        error
 
@@ -34,7 +32,7 @@ func (p *term) Start() error {
 			p.err = err
 			return
 		}
-		results := iostream.StdReaders{Stdout: stdout, Stderr: stderr}
+		results := StdReaders{Stdout: stdout, Stderr: stderr}
 		ioDone := results.Stream(p.redirector)
 		if err := p.p.Start(); err != nil {
 			p.err = err
@@ -57,8 +55,8 @@ func (p *term) Wait() error {
 func Term(prefix string, q P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
-	ps := iostream.PromStr(prefix)
-	redirector := &iostream.StdWriters{
+	ps := PromStr(prefix)
+	redirector := &StdWriters{
 		Stdout: ps.NewTerm(outW),
 		Stderr: ps.NewTerm(errW),
 	}
@@ -74,10 +72,10 @@ func Term(prefix string, q P) P {
 	return p
 }
 
-func DynTerm(ps iostream.PromoFn, q P) P {
+func DynTerm(ps PromoFn, q P) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
-	redirector := &iostream.StdWriters{
+	redirector := &StdWriters{
 		Stdout: ps.NewTerm(outW),
 		Stderr: ps.NewTerm(errW),
 	}

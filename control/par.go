@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io"
 	"sync"
-
-	"github.com/lgarithm/proc/iostream"
 )
 
 type par struct {
@@ -32,11 +30,11 @@ func (p *par) Stdpipe() (io.Reader, io.Reader, error) {
 		errs = append(errs, stderr)
 	}
 	go func() {
-		iostream.Mix(p.outW, outs...)
+		mix(p.outW, outs...)
 		p.outW.Close()
 	}()
 	go func() {
-		iostream.Mix(p.errW, errs...)
+		mix(p.errW, errs...)
 		p.errW.Close()
 	}()
 	return p.outR, p.errR, nil

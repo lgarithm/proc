@@ -3,8 +3,6 @@ package control
 import (
 	"io"
 	"sync"
-
-	"github.com/lgarithm/proc/iostream"
 )
 
 type seq struct {
@@ -24,7 +22,7 @@ func (p *seq) Stdpipe() (io.Reader, io.Reader, error) {
 }
 
 func (p *seq) Start() error {
-	redirector := &iostream.StdWriters{
+	redirector := &StdWriters{
 		Stdout: p.outW,
 		Stderr: p.errW,
 	}
@@ -35,7 +33,7 @@ func (p *seq) Start() error {
 				p.firstErr = err
 				break
 			}
-			results := iostream.StdReaders{Stdout: stdout, Stderr: stderr}
+			results := StdReaders{Stdout: stdout, Stderr: stderr}
 			ioDone := results.Stream(redirector)
 			if err := q.Start(); err != nil {
 				p.firstErr = err

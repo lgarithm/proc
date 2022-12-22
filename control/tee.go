@@ -3,13 +3,11 @@ package control
 import (
 	"io"
 	"sync"
-
-	"github.com/lgarithm/proc/iostream"
 )
 
 type tee struct {
 	p   P
-	ws  []*iostream.StdWriters
+	ws  []*StdWriters
 	err error
 
 	outR io.ReadCloser
@@ -35,8 +33,8 @@ func (p *tee) Start() error {
 			p.err = err
 			return
 		}
-		upstream := iostream.StdReaders{Stdout: stdout, Stderr: stderr}
-		w0 := &iostream.StdWriters{
+		upstream := StdReaders{Stdout: stdout, Stderr: stderr}
+		w0 := &StdWriters{
 			Stdout: p.outW,
 			Stderr: p.errW,
 		}
@@ -60,7 +58,7 @@ func (p *tee) Wait() error {
 	return p.err
 }
 
-func Tee(q P, ws ...*iostream.StdWriters) P {
+func Tee(q P, ws ...*StdWriters) P {
 	outR, outW := io.Pipe()
 	errR, errW := io.Pipe()
 	p := &tee{
