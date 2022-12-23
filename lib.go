@@ -1,6 +1,7 @@
 package proc
 
 import (
+	"bytes"
 	"context"
 
 	"github.com/lgarithm/proc/builtin"
@@ -21,7 +22,20 @@ var (
 	Run    = execution.Run
 	Output = execution.Output
 	Out    = Output
+)
 
+func Capture(p P) ([]byte, []byte, error) {
+	stdout := &bytes.Buffer{}
+	stderr := &bytes.Buffer{}
+	stdpipe := &iostream.StdWriters{
+		Stdout: stdout,
+		Stderr: stderr,
+	}
+	r := Run(p, stdpipe)
+	return stdout.Bytes(), stderr.Bytes(), r.Err
+}
+
+var (
 	Par = control.Par
 	Seq = control.Seq
 
@@ -53,12 +67,13 @@ type (
 )
 
 var (
-	At   = remote.At
-	RPC  = remote.RPC
-	SH   = Shell
-	SSH  = remote.SSH
-	Trpc = remote.Trpc
-	Urpc = remote.Urpc
+	At     = remote.At
+	RPC    = remote.RPC
+	SH     = Shell
+	SSH    = remote.SSH
+	SSHVia = remote.SSHVia
+	Trpc   = remote.Trpc
+	Urpc   = remote.Urpc
 )
 
 func PC(prog string, args ...string) P { return Psh(Call(prog, args...)) }

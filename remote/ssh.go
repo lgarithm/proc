@@ -2,7 +2,6 @@ package remote
 
 import (
 	"io"
-	"io/ioutil"
 	"net"
 	"os"
 	"os/user"
@@ -70,19 +69,22 @@ func newClient(p Proc, timeout time.Duration) (*ssh.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	cfg := &ssh.ClientConfig{
-		User: getUser(p.User),
+	client, err := sshDialFirst(p.Host, userKey(getUser(p.User), key, timeout))
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func userKey(user string, key ssh.Signer, timeout time.Duration) *ssh.ClientConfig {
+	return &ssh.ClientConfig{
+		User: user,
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(key),
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		Timeout:         timeout,
 	}
-	client, err := ssh.Dial("tcp", addDefaultPort(p.Host), cfg)
-	if err != nil {
-		return nil, err
-	}
-	return client, nil
 }
 
 func defaultKeyFile() (ssh.Signer, error) {
@@ -91,7 +93,7 @@ func defaultKeyFile() (ssh.Signer, error) {
 		return nil, err
 	}
 	file := path.Join(home, ".ssh", "id_rsa")
-	buf, err := ioutil.ReadFile(file)
+	buf, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
@@ -115,4 +117,8 @@ func getUser(usr string) string {
 		return u.Username
 	}
 	return ""
+}
+
+func sshDialFirst(host string, cfg *ssh.ClientConfig) (*ssh.Client, error) {
+	return ssh.Dial(`tcp`, addDefaultPort(host), cfg)
 }
