@@ -51,10 +51,3 @@ func (w *SaveFirstdWriter) Write(bs []byte) (int, error) {
 	}
 	return len(bs), nil
 }
-
-// Null implements /dev/null
-type Null struct{}
-
-func (w *Null) Write(bs []byte) (int, error) {
-	return len(bs), nil
-}

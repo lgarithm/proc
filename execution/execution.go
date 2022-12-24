@@ -34,6 +34,7 @@ func Output(p P) []byte {
 	stdout := &bytes.Buffer{}
 	stdpipe := &iostream.StdWriters{
 		Stdout: stdout,
+		Stderr: io.Discard,
 	}
 	Run(p, stdpipe) // FIXME: handle error
 	return stdout.Bytes()
