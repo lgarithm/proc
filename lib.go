@@ -121,3 +121,11 @@ var (
 type PS1 string
 
 func (ps PS1) Term(p P) P { return Term(string(ps), p) }
+
+type CreatePFn = func(prog string, args ...string) P
+
+func Jump(a UserHost, relay UserHost) CreatePFn {
+	return func(prog string, args ...string) P {
+		return relay.RPC(a.Call(prog, args...))
+	}
+}
