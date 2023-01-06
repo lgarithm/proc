@@ -129,3 +129,9 @@ func Jump(a UserHost, relay UserHost) CreatePFn {
 		return relay.RPC(a.Call(prog, args...))
 	}
 }
+
+func WithTerm(pc CreatePFn) CreatePFn {
+	return func(prog string, args ...string) P {
+		return Term(prog+` % `, pc(prog, args...))
+	}
+}
