@@ -1,6 +1,7 @@
 package experimental
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/lgarithm/proc"
@@ -37,4 +38,23 @@ func WaitSSH(a At) P {
 			urpc(a, `pwd`),
 		)
 	})
+}
+
+type CreatePFn = proc.CreatePFn
+
+func WithLog(pc CreatePFn) CreatePFn {
+	return func(prog string, args ...string) P {
+		var t0 time.Time
+		return seq(
+			lmd(func() P {
+				t0 = time.Now()
+				return echo(`BGN ` + prog)
+			}),
+			pc(prog, args...),
+			lmd(func() P {
+				d := time.Since(t0)
+				return echo(`END ` + prog + fmt.Sprintf(" | took %s", d))
+			}),
+		)
+	}
 }
