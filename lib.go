@@ -135,3 +135,11 @@ func WithTerm(pc CreatePFn) CreatePFn {
 		return Term(prog+` % `, pc(prog, args...))
 	}
 }
+
+func Tee2Files(name string, p P) P {
+	o, err := Open2(name+`.out.log`, name+`.err.log`)
+	if err != nil {
+		return Error(err)
+	}
+	return Tee(p, o.StdWriters())
+}
