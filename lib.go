@@ -130,6 +130,10 @@ func Jump(a UserHost, relay UserHost) CreatePFn {
 	}
 }
 
+func Port(p Proc) func(pc CreatePFn) P {
+	return func(pc CreatePFn) P { return pc(p.Prog, p.Args...) }
+}
+
 func WithTerm(pc CreatePFn) CreatePFn {
 	return func(prog string, args ...string) P {
 		return Term(prog+` % `, pc(prog, args...))
