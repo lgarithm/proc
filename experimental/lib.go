@@ -2,6 +2,7 @@ package experimental
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/lgarithm/proc"
@@ -44,16 +45,17 @@ type CreatePFn = proc.CreatePFn
 
 func WithLog(pc CreatePFn) CreatePFn {
 	return func(prog string, args ...string) P {
+		cmd := strings.Join(append([]string{prog}, args...), ` `)
 		var t0 time.Time
 		return seq(
 			lmd(func() P {
 				t0 = time.Now()
-				return echo(`BGN ` + prog)
+				return echo(`BGN % ` + cmd)
 			}),
 			pc(prog, args...),
 			lmd(func() P {
 				d := time.Since(t0)
-				return echo(`END ` + prog + fmt.Sprintf(" | took %s", d))
+				return echo(`END % ` + cmd + fmt.Sprintf(" | took %s", d))
 			}),
 		)
 	}
