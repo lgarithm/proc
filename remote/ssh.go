@@ -1,6 +1,7 @@
 package remote
 
 import (
+	"errors"
 	"io"
 	"net"
 	"os"
@@ -87,17 +88,29 @@ func userKey(user string, key ssh.Signer, timeout time.Duration) *ssh.ClientConf
 	}
 }
 
+var identityFiles = []string{
+	`id_rsa`,
+	`id_ecdsa`,
+	`id_ecdsa_sk`,
+	`id_ed25519`,
+	`id_ed25519_sk`,
+	`id_dsa`,
+}
+
+var errIdentityFileNotFound = errors.New(`identity files not found`)
+
 func defaultKeyFile() (ssh.Signer, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
 	}
-	file := path.Join(home, ".ssh", "id_rsa")
-	buf, err := os.ReadFile(file)
-	if err != nil {
-		return nil, err
+	for _, id := range identityFiles {
+		file := path.Join(home, ".ssh", id)
+		if buf, err := os.ReadFile(file); err == nil {
+			return ssh.ParsePrivateKey(buf)
+		}
 	}
-	return ssh.ParsePrivateKey(buf)
+	return nil, errIdentityFileNotFound
 }
 
 func addDefaultPort(host string) string {
