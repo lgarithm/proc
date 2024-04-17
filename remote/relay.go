@@ -19,10 +19,10 @@ func (p *relayShell) Stdpipe() (io.Reader, io.Reader, error) {
 		return nil, nil, err
 	}
 	u := p.relay.WithKey(key)
-	if p.relayClient, p.err = sshDialFirst(u.Host, u.SSHConfig(p.timeout)); p.err != nil {
+	if p.relayClient, p.err = sshDialFirst(u.Host, u.SSHConfig(p.dialTimeout)); p.err != nil {
 		return nil, nil, p.err
 	}
-	if p.client, p.err = sshDialNext(p.relayClient, p.p.Host, userKey(p.p.User, key, p.timeout)); p.err != nil {
+	if p.client, p.err = sshDialNext(p.relayClient, p.p.Host, userKey(p.p.User, key, p.dialTimeout)); p.err != nil {
 		return nil, nil, p.err
 	}
 	if p.sess, p.err = p.client.NewSession(); p.err != nil {

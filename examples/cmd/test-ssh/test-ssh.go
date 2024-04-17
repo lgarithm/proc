@@ -19,7 +19,7 @@ func main() {
 		Prog: pwd + "/bin/task",
 		Host: `localhost`,
 	}
-	p := proc.SSH(q).Timeout(100 * time.Millisecond)
+	p := proc.SSH(q).DialTimeout(100 * time.Millisecond)
 	r := proc.Run(p, &iostream.Std)
 	r.Unwrap()
 }

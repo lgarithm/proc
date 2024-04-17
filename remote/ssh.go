@@ -13,17 +13,17 @@ import (
 )
 
 type sshell struct {
-	p       Proc
-	timeout time.Duration
-	err     error
-	client  *ssh.Client
-	sess    *ssh.Session
+	p           Proc
+	dialTimeout time.Duration
+	err         error
+	client      *ssh.Client
+	sess        *ssh.Session
 
 	pty bool
 }
 
 func (p *sshell) Stdpipe() (io.Reader, io.Reader, error) {
-	if p.client, p.err = newClient(p.p, p.timeout); p.err != nil {
+	if p.client, p.err = newClient(p.p, p.dialTimeout); p.err != nil {
 		return nil, nil, p.err
 	}
 	if p.sess, p.err = p.client.NewSession(); p.err != nil {
@@ -52,8 +52,8 @@ func (p *sshell) Wait() error {
 	return p.sess.Wait()
 }
 
-func (p *sshell) Timeout(timeout time.Duration) *sshell {
-	p.timeout = timeout
+func (p *sshell) DialTimeout(timeout time.Duration) *sshell {
+	p.dialTimeout = timeout
 	return p
 }
 

@@ -132,7 +132,7 @@ func sshExample() {
 		Args: []string{`100000`},
 		Host: `localhost`,
 	}
-	p := proc.SSH(q).Timeout(100 * time.Millisecond)
+	p := proc.SSH(q).DialTimeout(100 * time.Millisecond)
 	w := iostream.NewTerminalRedirector(``)
 	r := proc.Run(p, w)
 	r.Unwrap()
