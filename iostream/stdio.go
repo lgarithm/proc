@@ -40,6 +40,17 @@ func (r *StdReaders) Stream(ws ...*StdWriters) interface{ Wait() } {
 	return &wg
 }
 
+type WriterFunc func([]byte) (int, error)
+
+func (w WriterFunc) Write(bs []byte) (int, error) { return w(bs) }
+
+func MakeStdWriters(o, e WriterFunc) *StdWriters {
+	return &StdWriters{
+		Stdout: o,
+		Stderr: e,
+	}
+}
+
 // SaveFirstdWriter remembers the content of the first Write call
 type SaveFirstdWriter struct {
 	First string
