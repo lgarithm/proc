@@ -22,7 +22,9 @@ func (p *relayShell) Stdpipe() (io.Reader, io.Reader, error) {
 	if p.relayClient, p.err = sshDialFirst(u.Host, u.SSHConfig(p.dialTimeout)); p.err != nil {
 		return nil, nil, p.err
 	}
-	if p.client, p.err = sshDialNext(p.relayClient, p.p.Host, userKey(p.p.User, key, p.dialTimeout)); p.err != nil {
+	cc := userKey(p.p.User, key)
+	cc.Timeout = p.dialTimeout
+	if p.client, p.err = sshDialNext(p.relayClient, p.p.Host, cc); p.err != nil {
 		return nil, nil, p.err
 	}
 	if p.sess, p.err = p.client.NewSession(); p.err != nil {
